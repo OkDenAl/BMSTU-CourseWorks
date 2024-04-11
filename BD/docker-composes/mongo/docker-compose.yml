@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+  mongo:
+    container_name: monginit
+    image: mongo:6.0
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 3s
+      start_period: 10s

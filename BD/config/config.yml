@@ -1,0 +1,17 @@
+postgres:
+  conn_string: postgresql://postgres:root@localhost:5432/story_stat?sslmode=disable
+  max_idle_lifetime: 10s
+  max_conn_lifetime: 5m
+  max_conn_amount: 30
+  min_conn_amount: 5
+
+cassandra:
+  hosts:
+    - 127.0.0.1
+  keyspace: story_stat
+
+mongo:
+  db_name: story_stat
+  connect_timeout: 5s
+  min_pool_size: 10
+  max_pool_size: 10
