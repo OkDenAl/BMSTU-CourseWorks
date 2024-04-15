@@ -5,12 +5,10 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/pkg/errors"
-
-	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/repo/postgres/dbview"
 )
 
 func (r Repo) UpdateStat(ctx context.Context, storyID string) error {
-	req, args, err := psql.Update(dbview.StoryStatTableName).
+	req, args, err := psql.Update(storyStatTableName).
 		Set("count", squirrel.Expr("count + 1")).
 		Where(squirrel.Eq{"story_id": storyID}).
 		ToSql()

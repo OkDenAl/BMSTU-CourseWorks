@@ -9,7 +9,7 @@ import (
 )
 
 type iRepo interface {
-	CreateStat(ctx context.Context, stat domain.StoryStat) (string, error)
+	CreateStat(ctx context.Context, stat domain.StoryStat) error
 	UpdateStat(ctx context.Context, storyID string) error
 	GetStoryByIDs(ctx context.Context, IDs ...string) ([]domain.StoryStat, error)
 }

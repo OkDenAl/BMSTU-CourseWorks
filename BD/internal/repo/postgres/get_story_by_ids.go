@@ -9,17 +9,16 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/domain"
-	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/repo/postgres/dbview"
 )
 
-func (r Repo) GetStoryByIDs(ctx context.Context, ids []string) ([]domain.StoryStat, error) {
+func (r Repo) GetStoryByIDs(ctx context.Context, ids ...string) ([]domain.StoryStat, error) {
 	qArgs := make([]interface{}, len(ids))
 	for i, v := range ids {
 		qArgs[i] = v
 	}
 
 	req, args, err := psql.Select("*").
-		From(dbview.StoryStatTableName).
+		From(storyStatTableName).
 		Where(squirrel.Expr("story_id IN ("+squirrel.Placeholders(len(ids))+")", qArgs...)).
 		ToSql()
 	if err != nil {

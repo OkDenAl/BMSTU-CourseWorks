@@ -1,8 +1,8 @@
-package dbview
+package postgres
 
-const StoryStatTableName = "story_stat"
+const storyStatTableName = "story_stat"
 
-func StoryStatAllColumns() []string {
+func storyStatAllColumns() []string {
 	return []string{
 		"story_id",
 		"author_id",
