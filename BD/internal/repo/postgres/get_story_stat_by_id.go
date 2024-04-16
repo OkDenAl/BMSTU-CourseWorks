@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+
 	"github.com/Masterminds/squirrel"
 	"github.com/pkg/errors"
 

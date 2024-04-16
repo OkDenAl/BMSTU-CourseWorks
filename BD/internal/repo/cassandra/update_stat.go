@@ -2,6 +2,7 @@ package cassandra
 
 import (
 	"context"
+
 	"github.com/gocql/gocql"
 	"github.com/pkg/errors"
 	"github.com/scylladb/gocqlx/v2/qb"

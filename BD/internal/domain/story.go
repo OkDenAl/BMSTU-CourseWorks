@@ -14,7 +14,7 @@ type Story struct {
 	CreatedAt time.Time
 }
 
-func NewDefaultStoryStat() Story {
+func NewDefaultStory() Story {
 	return Story{
 		StoryID:   uuid.New().String(),
 		AuthorID:  uuid.New().String(),
@@ -23,7 +23,7 @@ func NewDefaultStoryStat() Story {
 	}
 }
 
-func NewStoryStat() Story {
+func NewStory() Story {
 	story := NewStoryJSON()
 	storyJSON, _ := json.Marshal(story)
 

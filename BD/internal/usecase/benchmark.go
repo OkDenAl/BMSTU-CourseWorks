@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 
+	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/config"
 	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/domain"
 )
 
@@ -12,12 +13,12 @@ type iRepo interface {
 	GetStoryViewStatByID(ctx context.Context, id string) (domain.StoryStat, error)
 }
 
-type Usecase struct {
-	mongoRepo     iRepo
-	postgresRepo  iRepo
-	cassandraRepo iRepo
+type Benchmark struct {
+	repo iRepo
+	cfg  config.BenchmarkConfig
+	data []domain.Story
 }
 
-func New(mongoRepo, postgresRepo, cassandraRepo iRepo) Usecase {
-	return Usecase{mongoRepo: mongoRepo, cassandraRepo: cassandraRepo, postgresRepo: postgresRepo}
+func New(repo iRepo, cfg config.BenchmarkConfig, data []domain.Story) Benchmark {
+	return Benchmark{repo: repo, cfg: cfg, data: data}
 }

@@ -2,10 +2,12 @@ package cassandra
 
 import (
 	"context"
-	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/domain"
+
 	"github.com/gocql/gocql"
 	"github.com/pkg/errors"
 	"github.com/scylladb/gocqlx/v2/qb"
+
+	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/domain"
 )
 
 func (r Repo) CreateStat(ctx context.Context, story domain.Story) error {
@@ -30,5 +32,4 @@ func (r Repo) CreateStat(ctx context.Context, story domain.Story) error {
 	}
 
 	return nil
-
 }

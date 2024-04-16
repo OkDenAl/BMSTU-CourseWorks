@@ -53,7 +53,7 @@ func consoleDefaultFormatCaller(noColor bool) zerolog.Formatter {
 		if cc, ok := i.(string); ok {
 			c = cc
 		}
-		if len(c) > 0 {
+		if c != "" {
 			c = filepath.Base(c)
 			c = colorize(c, colorBold, noColor) + colorize(" >", colorCyan, noColor)
 		}

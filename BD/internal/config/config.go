@@ -11,11 +11,18 @@ import (
 	"github.com/OkDenAl/BMSTU-CourseWorks/BD/pkg/postgresinit"
 )
 
-type Config struct {
-	Postgres  postgresinit.Config `yaml:"postgres" validate:"required"`
-	Mongo     monginit.Config     `yaml:"mongo" validate:"required"`
-	Cassandra cassandrinit.Config `yaml:"cassandra" validate:"required"`
-}
+type (
+	Config struct {
+		Postgres  postgresinit.Config `yaml:"postgres" validate:"required"`
+		Mongo     monginit.Config     `yaml:"mongo" validate:"required"`
+		Cassandra cassandrinit.Config `yaml:"cassandra" validate:"required"`
+		Benchmark BenchmarkConfig     `json:"usecase" validate:"required"`
+	}
+
+	BenchmarkConfig struct {
+		ObjectsAmount int `json:"objects_amount" validate:"required"`
+	}
+)
 
 func New() (*Config, error) {
 	const configPath = "./config/config.yml"

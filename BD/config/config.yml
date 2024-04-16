@@ -15,3 +15,6 @@ mongo:
   connect_timeout: 5s
   min_pool_size: 10
   max_pool_size: 10
+
+benchmarks:
+  objects_amount: 100
