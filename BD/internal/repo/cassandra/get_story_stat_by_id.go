@@ -9,10 +9,10 @@ import (
 	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/domain"
 )
 
-func (r Repo) GetStoryStatByID(ctx context.Context, id string) (domain.StoryStat, error) {
+func (r Repo) GetStoryViewStatByID(ctx context.Context, id string) (domain.StoryStat, error) {
 	var stat domain.StoryStat
-	allColumns := r.storiesTable.Metadata().Columns
-	err := r.storiesTable.
+	allColumns := r.storiesViewStatTable.Metadata().Columns
+	err := r.storiesViewStatTable.
 		GetQueryContext(ctx, r.session, allColumns...).
 		Bind(id).
 		Consistency(gocql.One).

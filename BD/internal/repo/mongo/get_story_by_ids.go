@@ -6,7 +6,7 @@ import (
 	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/domain"
 )
 
-func (r Repo) GetStoryStatByID(ctx context.Context, id string) (domain.StoryStat, error) {
+func (r Repo) GetStoryByID(ctx context.Context, id string) (domain.Story, error) {
 	//res := r.col.Find(ctx,
 	//	bson.D{
 	//		{Key: dbview.SubscriptionReq.Column.UserID, Value: selfID},
@@ -21,5 +21,5 @@ func (r Repo) GetStoryStatByID(ctx context.Context, id string) (domain.StoryStat
 	//}
 	//
 	//return stats, nil
-	return domain.StoryStat{}, nil
+	return domain.Story{}, nil
 }

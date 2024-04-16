@@ -1,68 +1,45 @@
 package domain
 
 import (
-	"math/rand"
+	"encoding/json"
 	"time"
 
-	"github.com/goombaio/namegenerator"
+	"github.com/google/uuid"
 )
 
-type (
-	Story struct {
-		User      string   `json:"user"`
-		StoryType string   `json:"story_type"`
-		Duration  int      `json:"duration"`
-		Media     Media    `json:"media"`
-		Captions  Captions `json:"captions"`
-		Tags      []string `json:"tags"`
-	}
-
-	Media struct {
-		URL  string `json:"url"`
-		Size string `json:"size"`
-	}
-
-	Captions struct {
-		Text            string `json:"text"`
-		Style           string `json:"style"`
-		TextColor       string `json:"text_color"`
-		BackgroundColor string `json:"background_color"`
-	}
-)
-
-func randomString(length int) string {
-	charset := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-	result := make([]byte, length)
-	for i := range result {
-		result[i] = charset[rand.Intn(len(charset))]
-	}
-	return string(result)
+type Story struct {
+	StoryID   string
+	AuthorID  string
+	StoryJSON string
+	CreatedAt time.Time
 }
 
-func NewStory() Story {
-	const (
-		basicFieldLen = 20
-		urlFieldLen   = 10
-		textFieldLen  = 120
-	)
+func NewDefaultStoryStat() Story {
+	return Story{
+		StoryID:   uuid.New().String(),
+		AuthorID:  uuid.New().String(),
+		StoryJSON: "story_json",
+		CreatedAt: time.Now(),
+	}
+}
 
-	seed := time.Now().UTC().UnixNano()
-	nameGenerator := namegenerator.NewNameGenerator(seed)
+func NewStoryStat() Story {
+	story := NewStoryJSON()
+	storyJSON, _ := json.Marshal(story)
 
 	return Story{
-		User:      nameGenerator.Generate(),
-		StoryType: randomString(basicFieldLen),
-		Duration:  rand.Intn(30) + 1,
-		Captions: Captions{
-			Text:            randomString(textFieldLen),
-			Style:           randomString(basicFieldLen),
-			TextColor:       randomString(basicFieldLen),
-			BackgroundColor: randomString(basicFieldLen),
-		},
-		Media: Media{
-			URL:  "https://example.com/" + randomString(urlFieldLen),
-			Size: "small",
-		},
-		Tags: []string{"nature", "sunset", "photography"},
+		StoryID:   uuid.New().String(),
+		AuthorID:  uuid.New().String(),
+		StoryJSON: string(storyJSON),
+		CreatedAt: time.Now(),
+	}
+}
+
+func (ss Story) Vals() []any {
+	return []any{
+		ss.StoryID,
+		ss.AuthorID,
+		ss.StoryJSON,
+		ss.CreatedAt,
 	}
 }

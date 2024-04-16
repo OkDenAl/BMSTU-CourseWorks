@@ -7,9 +7,9 @@ import (
 )
 
 type iRepo interface {
-	CreateStat(ctx context.Context, stat domain.StoryStat) error
+	CreateStat(ctx context.Context, stat domain.Story) error
 	UpdateStat(ctx context.Context, storyID string) error
-	GetStoryStatByID(ctx context.Context, id string) (domain.StoryStat, error)
+	GetStoryViewStatByID(ctx context.Context, id string) (domain.StoryStat, error)
 }
 
 type Usecase struct {

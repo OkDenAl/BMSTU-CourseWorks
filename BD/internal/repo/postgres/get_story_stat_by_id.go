@@ -8,9 +8,9 @@ import (
 	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/domain"
 )
 
-func (r Repo) GetStoryStatByID(ctx context.Context, id string) (domain.StoryStat, error) {
-	req, args, err := psql.Select("*").
-		From(storyStatTableName).
+func (r Repo) GetStoryViewStatByID(ctx context.Context, id string) (domain.StoryStat, error) {
+	req, args, err := psql.Select(storyViewStatAllColumns()...).
+		From(storyViewStatTableName).
 		Where(squirrel.Eq{"story_id": id}).
 		ToSql()
 	if err != nil {
@@ -18,8 +18,8 @@ func (r Repo) GetStoryStatByID(ctx context.Context, id string) (domain.StoryStat
 	}
 
 	var stat domain.StoryStat
-	row := r.db.QueryRow(ctx, req, args)
-	if err = row.Scan(&stat); err != nil {
+	row := r.db.QueryRow(ctx, req, args...)
+	if err = row.Scan(&stat.StoryID, &stat.Count); err != nil {
 		return domain.StoryStat{}, errors.Wrap(err, "failed to get story stat")
 	}
 

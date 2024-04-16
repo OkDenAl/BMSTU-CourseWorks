@@ -6,13 +6,15 @@ import (
 )
 
 type Repo struct {
-	session      gocqlx.Session
-	storiesTable *table.Table
+	session              gocqlx.Session
+	storiesTable         *table.Table
+	storiesViewStatTable *table.Table
 }
 
 func New(session gocqlx.Session) *Repo {
 	return &Repo{
-		session:      session,
-		storiesTable: storiesTable(),
+		session:              session,
+		storiesTable:         storiesTable(),
+		storiesViewStatTable: storiesViewsStatTable(),
 	}
 }

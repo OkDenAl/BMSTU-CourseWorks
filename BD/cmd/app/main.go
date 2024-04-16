@@ -46,22 +46,49 @@ func main() {
 	cassandraRepo := cassandra.New(*sess)
 
 	t := time.Now()
-	err = cassandraRepo.CreateStat(ctx, domain.NewStoryStat())
+	err = cassandraRepo.CreateStat(ctx, domain.NewDefaultStoryStat())
+	if err != nil {
+		log.Panic().Stack().Err(err).Msg("failed to create stat")
+	}
+	fmt.Println(time.Since(t))
+
+	t = time.Now()
+	stat, err := cassandraRepo.GetStoryViewStatByID(ctx, "ba90b4d8-740e-4cb9-8ba9-9912fe623bd1")
 	if err != nil {
 		log.Panic().Stack().Err(err).Msg("failed to create stat")
 	}
 
 	fmt.Println(time.Since(t))
+
+	fmt.Println(stat)
 
 	postgresRepo := postgres.New(pool)
 
 	t = time.Now()
-	err = postgresRepo.CreateStat(ctx, domain.NewStoryStat())
+	err = postgresRepo.CreateStat(ctx, domain.NewDefaultStoryStat())
 	if err != nil {
 		log.Panic().Stack().Err(err).Msg("failed to create stat")
 	}
 
 	fmt.Println(time.Since(t))
+
+	t = time.Now()
+	err = postgresRepo.UpdateStat(ctx, "659597bf-57c5-451b-95c2-61ab67f758af")
+	if err != nil {
+		log.Panic().Stack().Err(err).Msg("failed to create stat")
+	}
+
+	fmt.Println(time.Since(t))
+
+	fmt.Println(stat)
+
+	//t = time.Now()
+	//err = postgresRepo.UpdateStat(ctx, "23319247-07f3-46a8-a2e1-9400bf00ecc3")
+	//if err != nil {
+	//	log.Panic().Stack().Err(err).Msg("failed to create stat")
+	//}
+	//
+	//fmt.Println(time.Since(t))
 
 	//wg := &sync.WaitGroup{}
 	//wg.Add(1000)

@@ -9,7 +9,7 @@ import (
 	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/domain"
 )
 
-func (r Repo) CreateStat(ctx context.Context, stat domain.StoryStat) error {
+func (r Repo) CreateStat(ctx context.Context, stat domain.Story) error {
 	if _, err := r.col.InsertOne(ctx, stat); err != nil {
 		if mongo.IsDuplicateKeyError(err) {
 			return errors.Wrapf(err, "failed to insert %+v", stat)
