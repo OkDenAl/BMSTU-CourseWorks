@@ -49,15 +49,15 @@ services:
       - cassandra1
 
   cassandra-load-keyspace:
-    container_name: cassandrinit-load-keyspace
+    container_name: cassandra-load-keyspace
     image: cassandra:latest
     stdin_open: true
     depends_on:
       cassandra1:
         condition: service_healthy
     volumes:
-      - ../../migrations/cassandrinit/keyspace_init.cql:/keyspace_init.cql
-    command: /bin/bash -c "echo loading cassandrinit keyspace && cqlsh cassandra1 -f /keyspace_init.cql && echo keyspace loaded && tail -f /dev/null"
+      - ../../migrations/cassandra/keyspace_init.cql:/keyspace_init.cql
+    command: /bin/bash -c "echo loading cassandra keyspace && cqlsh cassandra1 -f /keyspace_init.cql && echo keyspace loaded && tail -f /dev/null"
     networks:
       cassandra-network:
 

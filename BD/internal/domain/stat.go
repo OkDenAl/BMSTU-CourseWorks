@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/google/uuid"
@@ -14,12 +15,26 @@ type StoryStat struct {
 	CreatedAt time.Time
 }
 
-func NewStoryStat(authorID, storyJSON string) StoryStat {
+func NewDefaultStoryStat() StoryStat {
 	return StoryStat{
 		StoryID:   uuid.New().String(),
-		AuthorID:  authorID,
-		StoryJSON: storyJSON,
+		AuthorID:  uuid.New().String(),
+		StoryJSON: "story_json",
 		Count:     0,
+		CreatedAt: time.Now(),
+	}
+}
+
+func NewStoryStat() StoryStat {
+	story := NewStory()
+	storyJSON, _ := json.Marshal(story)
+
+	return StoryStat{
+		StoryID:   uuid.New().String(),
+		AuthorID:  uuid.New().String(),
+		StoryJSON: string(storyJSON),
+		Count:     0,
+		CreatedAt: time.Now(),
 	}
 }
 

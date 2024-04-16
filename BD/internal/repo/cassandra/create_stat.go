@@ -15,7 +15,7 @@ func (r Repo) CreateStat(ctx context.Context, stat domain.StoryStat) error {
 		InsertQueryContext(ctx, r.session).
 		BindStruct(stat).
 		WithBindTransformer(gocqlx.UnsetEmptyTransformer).
-		Consistency(gocql.All).
+		Consistency(gocql.One).
 		ExecRelease()
 	if err != nil {
 		return errors.Wrap(err, "failed to execute create stat query")

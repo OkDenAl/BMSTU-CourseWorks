@@ -2,23 +2,24 @@ package cassandra
 
 import (
 	"context"
+
+	"github.com/gocql/gocql"
+	"github.com/pkg/errors"
+
 	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/domain"
 )
 
-func (r Repo) GetStoryByIDs(ctx context.Context, ids ...string) ([]domain.StoryStat, error) {
-	//res := r.col.Find(ctx,
-	//	bson.D{
-	//		{Key: dbview.SubscriptionReq.Column.UserID, Value: selfID},
-	//		{Key: dbview.SubscriptionReq.Column.SubscribedID, Value: subscriptionID},
-	//	},
-	//)
-	//if err := res.Err(); err != nil {
-	//	if errors.Is(err, mongo.ErrNoDocuments) {
-	//		return false, nil
-	//	}
-	//	return false, errors.Wrap(err, "SubReqExists")
-	//}
-	//
-	//return stats, nil
-	return nil, nil
+func (r Repo) GetStoryStatByID(ctx context.Context, id string) (domain.StoryStat, error) {
+	var stat domain.StoryStat
+	allColumns := r.storiesTable.Metadata().Columns
+	err := r.storiesTable.
+		GetQueryContext(ctx, r.session, allColumns...).
+		Bind(id).
+		Consistency(gocql.One).
+		GetRelease(&stat)
+	if err != nil {
+		return domain.StoryStat{}, errors.Wrap(err, "failed to get story stat")
+	}
+
+	return stat, nil
 }

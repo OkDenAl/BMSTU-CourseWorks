@@ -9,6 +9,6 @@ type Repo struct {
 	col    mongo.Collection
 }
 
-func NewRepo(client *mongo.Client, col mongo.Collection) *Repo {
+func New(client *mongo.Client, col mongo.Collection) *Repo {
 	return &Repo{client: client, col: col}
 }

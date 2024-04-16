@@ -2,9 +2,9 @@ package mongo
 
 import (
 	"context"
-	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/pkg/errors"
+	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/domain"
 )

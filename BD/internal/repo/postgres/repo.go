@@ -11,6 +11,6 @@ type Repo struct {
 
 var psql = sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 
-func NewRepo(db *pgxpool.Pool) *Repo {
+func New(db *pgxpool.Pool) *Repo {
 	return &Repo{db: db}
 }
