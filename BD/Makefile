@@ -2,6 +2,12 @@ CASSANDRA_MIGRATIONS = ./migrations/cassandra
 POSTGRES_MIGRATIONS = ./migrations/postgres
 MONGO_MIGRATIONS = ./migrations/mongo
 
+MONGO_USER = root
+MONGO_PASSWORD = password
+MONGO_SLEEP = 3
+
+MONGO_CONTAINER=story_mongo
+
 include .env
 export
 
@@ -61,6 +67,7 @@ migrate-new-postgres:
 .PHONY: start-mongo
 start-mongo:
 	(cd ./docker-composes/mongo; docker-compose up -d --build)
+	make .mongo-replicaset
 	make migrate-up-mongo
 
 .PHONY: stop-mongo
@@ -71,9 +78,18 @@ stop-mongo:
 migrate-up-mongo:
 	migrate -path=$(MONGO_MIGRATIONS) -database "${MONGO_MIGRATE_ENDPOINT}" up
 
+#.PHONY: .mongo-replicaset
+.mongo-replicaset:
+	@echo "Wait mongodb initialization..."
+	until docker exec -it $(MONGO_CONTAINER) mongosh \
+		--eval "db.auth('$(MONGO_USER)', '$(MONGO_PASSWORD)')"; do sleep $(MONGO_SLEEP); done;
+
+	docker exec -it $(MONGO_CONTAINER) mongosh \
+		--eval "db.auth('$(MONGO_USER)', '$(MONGO_PASSWORD)'); try { rs.initiate(); } catch(e) { print(e.message) }"
+
 .PHONY: migrate-new-mongo
 migrate-new-mongo:
-	migrate create -ext json -dir migrations/mongo -seq story_stat
+	migrate create -ext json -dir migrations/mongo -seq story
 
 lint:
 	golangci-lint run ./...

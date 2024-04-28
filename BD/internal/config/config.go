@@ -16,11 +16,16 @@ type (
 		Postgres  postgresinit.Config `yaml:"postgres" validate:"required"`
 		Mongo     monginit.Config     `yaml:"mongo" validate:"required"`
 		Cassandra cassandrinit.Config `yaml:"cassandra" validate:"required"`
-		Benchmark BenchmarkConfig     `json:"usecase" validate:"required"`
+		Benchmark BenchmarkConfig     `yaml:"benchmark" validate:"required"`
 	}
 
 	BenchmarkConfig struct {
-		ObjectsAmount int `json:"objects_amount" validate:"required"`
+		ObjectsAmount   int  `yaml:"objects_amount" validate:"required"`
+		CleanDataBefore bool `yaml:"clean_data_before" validate:"required"`
+		CreateData      bool `yaml:"create_data" validate:"required"`
+		UpdateData      bool `yaml:"update_data" validate:"required"`
+		GetData         bool `yaml:"get_data" validate:"required"`
+		NeedAsync       bool `yaml:"need_async"`
 	}
 )
 

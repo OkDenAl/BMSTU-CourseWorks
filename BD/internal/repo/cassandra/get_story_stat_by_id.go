@@ -18,7 +18,7 @@ func (r Repo) GetStoryViewStatByID(ctx context.Context, id string) (domain.Story
 		Consistency(gocql.One).
 		GetRelease(&stat)
 	if err != nil {
-		return domain.StoryStat{}, errors.Wrap(err, "failed to get story stat")
+		return domain.StoryStat{}, errors.Wrapf(err, "failed to get story stat with %s", id)
 	}
 
 	return stat, nil

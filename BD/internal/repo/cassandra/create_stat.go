@@ -14,7 +14,7 @@ func (r Repo) CreateStat(ctx context.Context, story domain.Story) error {
 	err := r.storiesTable.
 		InsertQueryContext(ctx, r.session).
 		BindStruct(story).
-		Consistency(gocql.One).
+		Consistency(gocql.All).
 		ExecRelease()
 	if err != nil {
 		return errors.Wrap(err, "failed to insert story")
@@ -25,7 +25,7 @@ func (r Repo) CreateStat(ctx context.Context, story domain.Story) error {
 			`UPDATE story_stat.story_views_stat SET count=count+0 WHERE story_id=?`,
 			[]string{"story_id"}).
 		BindMap(qb.M{"story_id": story.StoryID}).
-		Consistency(gocql.One).
+		Consistency(gocql.All).
 		ExecRelease()
 	if err != nil {
 		return errors.Wrap(err, "failed to insert story view stat")

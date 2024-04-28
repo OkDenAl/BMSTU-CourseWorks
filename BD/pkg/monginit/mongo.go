@@ -11,7 +11,7 @@ import (
 )
 
 type Config struct {
-	Endpoint string `env:"MONGO_ENDPOINT"`
+	Endpoint string `yaml:"endpoint" env:"MONGO_ENDPOINT"`
 	DBName   string `yaml:"db_name" env:"DB_NAME" validate:"required"`
 
 	ConnectTimeout time.Duration `yaml:"connect_timeout" env-default:"5s" validate:"required"`
@@ -19,7 +19,7 @@ type Config struct {
 	MaxPoolSize    uint64        `yaml:"max_pool_size" env-default:"10" validate:"gt=0"`
 }
 
-type CloserFn func(ctx context.Context) error
+type CloserFn func()
 
 func Connect(ctx context.Context, cfg Config) (client *mongo.Client, closer CloserFn, err error) {
 	opts := options.Client().
@@ -40,7 +40,11 @@ func Connect(ctx context.Context, cfg Config) (client *mongo.Client, closer Clos
 		return nil, nil, errors.Wrap(err, "failed to ping mongodb")
 	}
 
-	return client, client.Disconnect, nil
+	closeFn := func() {
+		_ = client.Disconnect(ctx)
+	}
+
+	return client, closeFn, nil
 }
 
 func disconnect(ctx context.Context, client *mongo.Client) {

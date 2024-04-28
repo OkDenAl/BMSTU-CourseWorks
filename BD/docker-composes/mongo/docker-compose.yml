@@ -1,15 +1,18 @@
 version: '3.9'
 services:
-  mongo:
-    container_name: monginit
+  story_mongo:
+    container_name: story_mongo
     image: mongo:6.0
     restart: always
     ports:
-      - "27017:27017"
+      - "27900:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - ./local-composer-init:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 3s
       start_period: 10s
+#    command: --replSet=rs0 --keyFile=/tmp/key.file --bind_ip_all

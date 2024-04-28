@@ -9,14 +9,12 @@ import (
 )
 
 func (r Repo) UpdateStat(ctx context.Context, storyID string) error {
-	_, err := r.col.UpdateOne(
+	_, err := r.storiesViewStat.UpdateOne(
 		ctx,
 		bson.M{
 			"story_id": storyID,
 		},
-		bson.M{
-			"$set": "count+1",
-		},
+		bson.M{"$inc": bson.M{"count": 1}},
 		options.Update(),
 	)
 	if err != nil {

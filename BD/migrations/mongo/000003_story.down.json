@@ -1,6 +1,6 @@
 [
   {
-    "dropIndexes": "idx_story_id",
+    "dropIndexes": "story",
     "index": "story_id_1"
   }
 ]

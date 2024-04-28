@@ -11,10 +11,16 @@ cassandra:
   keyspace: story_stat
 
 mongo:
+  endpoint: mongodb://user:password@localhost:27900/story_stat?directConnection=true
   db_name: story_stat
   connect_timeout: 5s
   min_pool_size: 10
   max_pool_size: 10
 
-benchmarks:
-  objects_amount: 100
+benchmark:
+  objects_amount: 10000
+  clean_data_before: true
+  create_data: true
+  update_data: true
+  get_data: true
+  need_async: true

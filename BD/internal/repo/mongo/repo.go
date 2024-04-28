@@ -5,10 +5,11 @@ import (
 )
 
 type Repo struct {
-	client *mongo.Client
-	col    mongo.Collection
+	client          *mongo.Client
+	stories         *mongo.Collection
+	storiesViewStat *mongo.Collection
 }
 
-func New(client *mongo.Client, col mongo.Collection) *Repo {
-	return &Repo{client: client, col: col}
+func New(client *mongo.Client, stories, storiesViewStat *mongo.Collection) *Repo {
+	return &Repo{client: client, stories: stories, storiesViewStat: storiesViewStat}
 }

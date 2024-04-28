@@ -3,15 +3,14 @@ package main
 import (
 	"context"
 	"fmt"
-	"sync"
-
+	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/domain"
+	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/repo/cassandra"
+	"github.com/OkDenAl/BMSTU-CourseWorks/BD/pkg/cassandrinit"
 	"github.com/ds248a/closer"
 
 	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/config"
-	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/repo/cassandra"
 	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/repo/postgres"
 	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/usecase"
-	"github.com/OkDenAl/BMSTU-CourseWorks/BD/pkg/cassandrinit"
 	"github.com/OkDenAl/BMSTU-CourseWorks/BD/pkg/logger"
 	"github.com/OkDenAl/BMSTU-CourseWorks/BD/pkg/postgresinit"
 )
@@ -38,37 +37,57 @@ func main() {
 	}
 	closer.Add(csCloser)
 
+	//mongoClient, mgCloser, err := monginit.Connect(ctx, cfg.Mongo)
+	//if err != nil {
+	//	log.Panic().Stack().Err(err).Msg("failed to create mongo connection")
+	//}
+	//closer.Add(mgCloser)
+	//
+	//storiesCol := mongoClient.Database(cfg.Mongo.DBName).Collection(mongo.Stories.CollectionName)
+	//storyViewStatCol := mongoClient.Database(cfg.Mongo.DBName).Collection(mongo.StoryViewsStat.CollectionName)
+
 	cassandraRepo := cassandra.New(*sess)
 	postgresRepo := postgres.New(pool)
+	//mongoRepo := mongo.New(mongoClient, storiesCol, storyViewStatCol)
 
-	log.Debug().Msg("starting to prepare data for benchmark")
 	preparedData := prepareDataForBenchmark(cfg.Benchmark)
-	log.Debug().Msg("data successfully prepared")
 
-	wg := sync.WaitGroup{}
 	var (
-		cassandraResults []string
-		postgresResults  []string
+		cassandraResults []*domain.BenchResult
+		postgresResults  []*domain.BenchResult
+		mongoResults     []*domain.BenchResult
 	)
 
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		cassandraResults, err = usecase.New(cassandraRepo, cfg.Benchmark, preparedData).StartBenchmarks(cfg.Benchmark)
-		if err != nil {
-			log.Panic().Stack().Err(err).Msg("failed to check cassandra")
-		}
-	}()
-	go func() {
-		defer wg.Done()
-		postgresResults, err = usecase.New(postgresRepo, cfg.Benchmark, preparedData).StartBenchmarks(cfg.Benchmark)
-		if err != nil {
-			log.Panic().Stack().Err(err).Msg("failed to check postgres")
-		}
-	}()
+	u := usecase.New(cassandraRepo, cfg.Benchmark)
+	cassandraResults, err = u.StartBenchmarks(ctx, preparedData)
+	if err != nil {
+		log.Panic().Stack().Err(err).Msg("failed to check cassandra")
+	}
 
-	wg.Wait()
+	u = usecase.New(postgresRepo, cfg.Benchmark)
+	postgresResults, err = u.StartBenchmarks(ctx, preparedData)
+	if err != nil {
+		log.Panic().Stack().Err(err).Msg("failed to check postgres")
+	}
 
-	fmt.Println(cassandraResults)
-	fmt.Println(postgresResults)
+	//u = usecase.New(mongoRepo, cfg.Benchmark)
+	//mongoResults, err = u.StartBenchmarks(ctx, preparedData)
+	//if err != nil {
+	//	log.Panic().Stack().Err(err).Msg("failed to check mongo")
+	//}
+
+	fmt.Println("POSTGRES RESULTS:")
+	printResults(postgresResults)
+
+	fmt.Println("CASSANDRA RESULTS:")
+	printResults(cassandraResults)
+
+	fmt.Println("MONGO RESULTS:")
+	printResults(mongoResults)
+}
+
+func printResults(res []*domain.BenchResult) {
+	for _, val := range res {
+		fmt.Println(val)
+	}
 }

@@ -1,6 +1,6 @@
 [
   {
-    "createIndexes": "idx_story_id",
+    "createIndexes": "story_views_stat",
     "indexes": [
       {
         "name": "story_id_1",

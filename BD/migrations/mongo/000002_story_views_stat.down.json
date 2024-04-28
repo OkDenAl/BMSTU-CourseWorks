@@ -1,0 +1,6 @@
+[
+  {
+    "dropIndexes": "story_views_stat",
+    "index": "story_id_1"
+  }
+]
