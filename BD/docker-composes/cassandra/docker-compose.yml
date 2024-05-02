@@ -7,7 +7,7 @@ services:
     ports:
       - "9042:9042"
     volumes:
-      - "cassandra_data_1:/var/lib/cassandrinit"
+      - "cassandra_data_1:/var/lib/cassandra"
     environment:
       - "CASSANDRA_SEEDS=cassandra1,cassandra2,cassandra3"
       - "CASSANDRA_CLUSTER_NAME=Test Cluster"
@@ -24,7 +24,7 @@ services:
     image: cassandra:latest
     container_name: cassandra2
     volumes:
-      - "cassandra_data_2:/var/lib/cassandrinit"
+      - "cassandra_data_2:/var/lib/cassandra"
     environment:
       - "CASSANDRA_SEEDS=cassandra1,cassandra2,cassandra3"
       - "CASSANDRA_CLUSTER_NAME=Test Cluster"
@@ -38,7 +38,7 @@ services:
     image: cassandra:latest
     container_name: cassandra3
     volumes:
-      - "cassandra_data_3:/var/lib/cassandrinit"
+      - "cassandra_data_3:/var/lib/cassandra"
     environment:
       - "CASSANDRA_SEEDS=cassandra1,cassandra2,cassandra3"
       - "CASSANDRA_CLUSTER_NAME=Test Cluster"

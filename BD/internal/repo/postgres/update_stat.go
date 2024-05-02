@@ -8,7 +8,8 @@ import (
 )
 
 func (r Repo) UpdateStat(ctx context.Context, storyID string) error {
-	req, args, err := psql.Update(storyViewStatTableName).
+	req, args, err := psql.
+		Update(storyViewStatTableName).
 		Set("count", squirrel.Expr("count + 1")).
 		Where(squirrel.Eq{"story_id": storyID}).
 		ToSql()

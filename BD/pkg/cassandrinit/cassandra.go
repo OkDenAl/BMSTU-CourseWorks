@@ -2,6 +2,7 @@ package cassandrinit
 
 import (
 	"context"
+	"time"
 
 	"github.com/gocql/gocql"
 	"github.com/pkg/errors"
@@ -13,9 +14,11 @@ type Config struct {
 	Keyspace string   `yaml:"keyspace" validate:"required"`
 }
 
-func New(ctx context.Context, cfg Config) (*gocqlx.Session, func(), error) {
+func New(_ context.Context, cfg Config) (*gocqlx.Session, func(), error) {
 	cluster := gocql.NewCluster(cfg.Hosts...)
 	cluster.Keyspace = cfg.Keyspace
+	cluster.Timeout = time.Second * 3
+	//cluster.WriteTimeout = time.Second
 
 	sess, err := gocql.NewSession(*cluster)
 	if err != nil {

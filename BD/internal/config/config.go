@@ -21,10 +21,10 @@ type (
 
 	BenchmarkConfig struct {
 		ObjectsAmount   int  `yaml:"objects_amount" validate:"required"`
-		CleanDataBefore bool `yaml:"clean_data_before" validate:"required"`
-		CreateData      bool `yaml:"create_data" validate:"required"`
-		UpdateData      bool `yaml:"update_data" validate:"required"`
-		GetData         bool `yaml:"get_data" validate:"required"`
+		CleanDataBefore bool `yaml:"clean_data_before"`
+		CreateData      bool `yaml:"create_data"`
+		UpdateData      bool `yaml:"update_data"`
+		GetData         bool `yaml:"get_data" `
 		NeedAsync       bool `yaml:"need_async"`
 	}
 )

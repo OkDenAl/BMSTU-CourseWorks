@@ -18,7 +18,7 @@ mongo:
   max_pool_size: 10
 
 benchmark:
-  objects_amount: 10000
+  objects_amount: 50000
   clean_data_before: true
   create_data: true
   update_data: true
