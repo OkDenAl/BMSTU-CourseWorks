@@ -1,0 +1,15 @@
+[
+  {
+    "createIndexes": "story_views_stat",
+    "indexes": [
+      {
+        "name": "story_id_1",
+        "key": {"story_id": 1},
+        "unique": true,
+        "background": true
+      }
+    ]
+  }
+]
+
+
