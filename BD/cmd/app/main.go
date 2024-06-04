@@ -3,14 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/domain"
-	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/repo/cassandra"
-	"github.com/OkDenAl/BMSTU-CourseWorks/BD/pkg/cassandrinit"
-	"github.com/ds248a/closer"
-
 	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/config"
+	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/domain"
+	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/repo/redis"
 	"github.com/OkDenAl/BMSTU-CourseWorks/BD/internal/usecase"
 	"github.com/OkDenAl/BMSTU-CourseWorks/BD/pkg/logger"
+	"github.com/OkDenAl/BMSTU-CourseWorks/BD/pkg/redisinit"
+	"github.com/ds248a/closer"
 )
 
 func main() {
@@ -28,13 +27,14 @@ func main() {
 	//	log.Panic().Stack().Err(err).Msg("failed to create postgres pool")
 	//}
 	//closer.Add(pgCloser)
+	//postgresRepo := postgres.New(pool)
 
-	sess, csCloser, err := cassandrinit.New(ctx, cfg.Cassandra)
-	if err != nil {
-		log.Panic().Stack().Err(err).Msg("failed to create cassandra session")
-	}
-	closer.Add(csCloser)
-	cassandraRepo := cassandra.New(*sess)
+	//sess, csCloser, err := cassandrinit.New(ctx, cfg.Cassandra)
+	//if err != nil {
+	//	log.Panic().Stack().Err(err).Msg("failed to create cassandra session")
+	//}
+	//closer.Add(csCloser)
+	//cassandraRepo := cassandra.New(*sess)
 
 	//mongoClient, mgCloser, err := monginit.Connect(ctx, cfg.Mongo)
 	//if err != nil {
@@ -45,8 +45,13 @@ func main() {
 	//storiesCol := mongoClient.Database(cfg.Mongo.DBName).Collection(mongo.Stories.CollectionName)
 	//storyViewStatCol := mongoClient.Database(cfg.Mongo.DBName).Collection(mongo.StoryViewsStat.CollectionName)
 	//mongoRepo := mongo.New(mongoClient, storiesCol, storyViewStatCol)
-	//
-	//postgresRepo := postgres.New(pool)
+
+	redisClient, rdCloser, err := redisinit.New(ctx, cfg.Redis)
+	if err != nil {
+		log.Panic().Stack().Err(err).Msg("failed to create mongo connection")
+	}
+	closer.Add(rdCloser)
+	redisRepo := redis.New(redisClient)
 
 	preparedData := prepareDataForBenchmark(cfg.Benchmark)
 
@@ -54,13 +59,14 @@ func main() {
 		cassandraResults []*domain.BenchResult
 		postgresResults  []*domain.BenchResult
 		mongoResults     []*domain.BenchResult
+		redisResults     []*domain.BenchResult
 	)
 
-	u := usecase.New(cassandraRepo, cfg.Benchmark)
-	cassandraResults, err = u.StartBenchmarks(ctx, preparedData)
-	if err != nil {
-		log.Panic().Stack().Err(err).Msg("failed to check cassandra")
-	}
+	//u := usecase.New(cassandraRepo, cfg.Benchmark)
+	//cassandraResults, err = u.StartBenchmarks(ctx, preparedData)
+	//if err != nil {
+	//	log.Panic().Stack().Err(err).Msg("failed to check cassandra")
+	//}
 
 	//u := usecase.New(postgresRepo, cfg.Benchmark)
 	//postgresResults, err = u.StartBenchmarks(ctx, preparedData)
@@ -74,6 +80,12 @@ func main() {
 	//	log.Panic().Stack().Err(err).Msg("failed to check mongo")
 	//}
 
+	u := usecase.New(redisRepo, cfg.Benchmark)
+	redisResults, err = u.StartBenchmarks(ctx, preparedData)
+	if err != nil {
+		log.Panic().Stack().Err(err).Msg("failed to check redis")
+	}
+
 	fmt.Println("POSTGRES RESULTS:")
 	printResults(postgresResults)
 
@@ -82,6 +94,9 @@ func main() {
 
 	fmt.Println("MONGO RESULTS:")
 	printResults(mongoResults)
+
+	fmt.Println("REDIS RESULTS:")
+	printResults(redisResults)
 }
 
 func printResults(res []*domain.BenchResult) {

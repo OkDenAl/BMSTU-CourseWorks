@@ -39,7 +39,7 @@ func NewPool(ctx context.Context, cfg Config) (*pgxpool.Pool, CloserFn, error) {
 	defer cancel()
 	if err = dbPool.Ping(ctx); err != nil {
 		dbPool.Close()
-		return nil, nil, errors.Wrap(err, "failed to ping db")
+		return nil, nil, errors.Wrap(err, "failed to ping postgres")
 	}
 
 	return dbPool, dbPool.Close, nil

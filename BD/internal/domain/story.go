@@ -14,6 +14,10 @@ type Story struct {
 	CreatedAt time.Time
 }
 
+func (s Story) MarshalBinary() ([]byte, error) {
+	return json.Marshal(s)
+}
+
 func NewDefaultStory() Story {
 	return Story{
 		StoryID:   uuid.New().String(),

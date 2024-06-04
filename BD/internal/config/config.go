@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/OkDenAl/BMSTU-CourseWorks/BD/pkg/redisinit"
 	"github.com/pkg/errors"
 
 	"github.com/go-playground/validator/v10"
@@ -16,6 +17,7 @@ type (
 		Postgres  postgresinit.Config `yaml:"postgres" validate:"required"`
 		Mongo     monginit.Config     `yaml:"mongo" validate:"required"`
 		Cassandra cassandrinit.Config `yaml:"cassandra" validate:"required"`
+		Redis     redisinit.Config    `yaml:"redis" validate:"required"`
 		Benchmark BenchmarkConfig     `yaml:"benchmark" validate:"required"`
 	}
 

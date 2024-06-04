@@ -12,8 +12,6 @@ include .env
 export
 
 # CASSANDRA
-
-
 .PHONY: start-cassandra
 start-cassandra:
 	(cd ./docker-composes/cassandra; docker-compose up -d --build)
@@ -36,9 +34,16 @@ migrate-new-cassandra:
 	migrate create -ext cql -dir migrations/cassandra -seq story
 
 
+# REDIS
+.PHONY: start-redis
+start-redis:
+	(cd ./docker-composes/redis; docker-compose up -d --build)
+
+.PHONY: stop-redis
+stop-redis:
+	(cd ./docker-composes/redis; docker-compose stop)
 
 # POSTGRES
-
 .PHONY: start-postgres
 start-postgres:
 	(cd ./docker-composes/postgres; docker-compose up -d --build)

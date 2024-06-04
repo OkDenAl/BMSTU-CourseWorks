@@ -22,12 +22,12 @@ func New(_ context.Context, cfg Config) (*gocqlx.Session, func(), error) {
 
 	sess, err := gocql.NewSession(*cluster)
 	if err != nil {
-		return nil, nil, errors.Wrap(err, "failed to create new cassandrinit session")
+		return nil, nil, errors.Wrap(err, "failed to create new cassandra session")
 	}
 
 	session, err := gocqlx.WrapSession(sess, err)
 	if err != nil {
-		return nil, nil, errors.Wrap(err, "failed to create new wrapped cassandrinit session")
+		return nil, nil, errors.Wrap(err, "failed to create new wrapped cassandra session")
 	}
 
 	return &session, session.Close, nil

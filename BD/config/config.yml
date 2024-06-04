@@ -10,6 +10,10 @@ cassandra:
     - 127.0.0.1
   keyspace: story_stat
 
+redis:
+  addr: localhost:6379
+  pool_size: 10
+
 mongo:
   endpoint: mongodb://user:password@localhost:27900/story_stat?directConnection=true
   db_name: story_stat
@@ -18,7 +22,7 @@ mongo:
   max_pool_size: 10
 
 benchmark:
-  objects_amount: 50000
+  objects_amount: 10000
   clean_data_before: true
   create_data: true
   update_data: true
