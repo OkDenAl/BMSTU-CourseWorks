@@ -1,0 +1,48 @@
+%{
+    type Tag int
+
+    const (
+    	ErrTag Tag = iota
+    	IdentTag
+    	NumTag
+    	AssemblyCommandTag
+    )
+
+    var tagToString = map[Tag]string{
+    	IdentTag:           "IDENT",
+    	NumTag:             "NUM",
+    	AssemblyCommandTag: "ASSEMBLY",
+    	ErrTag:             "ERR",
+    }
+%}
+
+
+%%
+[[\t\n ]+] {fmt.Println("skipped", s.curPos.String())}
+
+[[a-z]*] {return IdentTag}
+
+[[0-9]*]  {return NumTag}
+
+[(mov|eax)]  {return AssemblyCommandTag}
+%%
+
+
+func main() {
+	if len(os.Args) < 2 {
+		log.Fatal("usage must be: go run main.go <fileTag.txt>\n")
+	}
+	filePath := os.Args[1]
+
+	content, err := os.ReadFile(filePath)
+	if err != nil {
+		panic(err)
+	}
+	scn := NewScanner([]rune(string(content)))
+
+	t := scn.NextToken()
+	for t.tag != EOPTag {
+		fmt.Println(t.String())
+		t = scn.NextToken()
+	}
+}
