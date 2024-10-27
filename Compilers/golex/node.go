@@ -18,7 +18,7 @@ func NewInnerNode(nterm string) *InnerNode {
 func (in *InnerNode) Print(indent string) {
 	fmt.Println(indent+"Внутренний узел: ", in.nterm)
 	for _, child := range in.children {
-		child.Print(indent + " ")
+		child.Print(indent + "")
 	}
 }
 

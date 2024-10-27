@@ -1,0 +1,9 @@
+%%
+/[\t\n ]+/ Skip
+
+/(mov|eax)/ Assembly
+
+/[a-z]*/ Ident
+
+/[0-9]*/ Num
+%%

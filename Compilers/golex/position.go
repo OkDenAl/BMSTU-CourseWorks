@@ -47,13 +47,8 @@ func (p *Position) IsLetter() bool {
 	return unicode.IsLetter(p.symb)
 }
 
-func (p *Position) IsNonTerminal() bool {
+func (p *Position) IsUpperLetter() bool {
 	return unicode.IsLetter(p.symb) && unicode.IsUpper(p.symb)
-}
-
-func (p *Position) IsTerminal() bool {
-	return unicode.IsLetter(p.symb) && unicode.IsLower(p.symb) ||
-		p.symb == '*' || p.symb == '(' || p.symb == ')' || p.symb == '+'
 }
 
 func (p *Position) IsNewLine() bool {

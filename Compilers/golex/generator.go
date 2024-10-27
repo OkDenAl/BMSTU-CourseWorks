@@ -32,7 +32,11 @@ func generateFile(templateFile, generateFile string, data interface{}) {
 		os.Exit(ErrTmplReadCode)
 	}
 
-	tmpl, err := template.New(templateFile).Parse(tmplString)
+	tmpl, err := template.New(templateFile).Funcs(template.FuncMap{
+		"getTerminalStates": func(f *FiniteState) []int {
+			return f.TerminalStates
+		},
+	}).Parse(tmplString)
 	if err != nil {
 		fmt.Println("Ошибка при создании шаблона:", err)
 		os.Exit(ErrTmplCreationCode)
